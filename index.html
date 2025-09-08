@@ -271,6 +271,15 @@
       color: 666;
       animation: fadeIn 0.8s ease both 0.4s;
     }
+
+    .week-info {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #666;
+      font-weight: 500;
+      animation: fadeIn 0.8s ease both 0.6s;
+    }
     
     .back-btn {
       position: fixed;
@@ -582,7 +591,8 @@
     <button class="back-btn" id="backBtn">← Change Date</button>
     
     <h1>Your Life in Weeks</h1>
-    <div class="birth-info" id="birthInfo"></div>
+    <div class="birth-info" id="birthInfo"></div>    
+    <div class="week-info" id="weekInfo"></div>
     <div class="reflection" id="lifeReflection"></div>
 
     <div class="wrap">
@@ -1135,6 +1145,9 @@
 
       // Add milestone markers (only affects specific cells)
       markMilestones(cells);
+      
+      // Return weeks lived for display
+      return weeksLived;
     }
 
     function showLifeCalendar() {
@@ -1158,6 +1171,13 @@
         buildYAxis();
         buildGrid();
         markLivedWeeks(selectedDate);
+        const weeksLived = markLivedWeeks(selectedDate);
+        
+        // Update week info
+        const remainingWeeks = (COLS * ROWS)-weeksLived; // 52 weeks * 90 years = 4680 weeks
+        const weekInfo = document.getElementById('weekInfo');
+        weekInfo.textContent = `You are currently in week ${weeksLived}.\n ${remainingWeeks.toLocaleString()} estimated remaining weeks.`;
+
         showReflection();
       }, 100);
     }
