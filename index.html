@@ -20,7 +20,7 @@
       margin: 0;
       padding: 0;
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(120deg, #fdfdfd, #f8f9fa);
+      background: linear-gradient(120deg, #fdfdfd, #ffffff);
       color: #1a1a1a;
       overflow-x: hidden;
       transition: background 6s ease;
@@ -66,15 +66,13 @@
     /* Date Picker Screen Styles */
     .date-picker-screen {
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
-      font: 16px 'Roboto', sans-serif;
-      background: #f8f9fa;
-      animation: bgShift 12s ease-in-out infinite alternate;
-      overflow: hidden;
-      height: 100%;
-      padding: 20px;
+      justify-content: center;   /* keep centered */
+      align-items: center;
+      height: 100vh;             /* always full viewport height */
+      width: 100vw;              /* full viewport width */
+      padding: 5vh 2vw;          /* breathing room */
+      box-sizing: border-box;
     }
     
     .date-picker-screen h1 {
@@ -473,117 +471,7 @@
       100% { background: #eef2f7; }
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 920px) {
-      :root { 
-        --cell-size: 10px; 
-        --y-axis-width: 48px; 
-      }
-      .x-axis .tick { 
-        font-size: 10px; 
-      }
-      .center { 
-        transform: scale(1.1); 
-      }
-      .date-picker-screen h1 { 
-        font-size: 2rem; 
-      }
-    }
-
-    @media (max-height: 700px) {
-      .date-picker-screen {
-        justify-content: flex-start;
-        padding-top: 2vh;
-      }
-      
-      .date-picker-screen h1 {
-        font-size: 1.8rem;
-        margin-bottom: 0.8rem;
-      }
-      
-      .date-picker-screen .subtitle {
-        font-size: 1rem;
-        margin-bottom: 0.8rem;
-      }
-      
-      .center {
-        transform: scale(1);
-        margin: 0.2rem 0;
-      }
-      
-      .center .date {
-        font-size: 24px;
-        margin: 0.3rem 0;
-      }
-      
-      .center .date-picker {
-        padding: 10px 15px;
-        margin: 5px 0;
-      }
-      
-      .continue-btn {
-        margin-top: 0.8rem;
-        height: 40px;
-      }
-    }
-
-    /* Scale down grid on smaller screens */
-    @media (max-width: 768px) {
-      :root {
-        --cell-size: 5px;
-        --gap: 1px;
-        --y-axis-width: 20px;
-      }
-      .x-axis .tick {
-        font-size: 8px;
-      }
-      .y-axis .label {
-        font-size: 9px;
-      }
-    }
-    @media (max-height: 500px) {
-      .date-picker-screen h1 {
-        font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-      }
-      
-      .date-picker-screen .subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-      }
-      
-      .center {
-        transform: scale(0.9);
-      }
-      
-      .center .date {
-        font-size: 20px;
-      }
-      
-      .center .date-picker {
-        padding: 5px 10px;
-      }
-      
-      .center .day,
-      .center .month,
-      .center .year {
-        height: 40px;
-        margin: 0 8px;
-      }
-      
-      .center .day li,
-      .center .month li,
-      .center .year li {
-        height: 40px;
-        width: 70px;
-      }
-      
-      .continue-btn {
-        height: 36px;
-        font-size: 14px;
-        width: 140px;
-      }
-    }
+    
   </style>
 </head>
 <body>
