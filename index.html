@@ -597,6 +597,7 @@
     <h1>Your Life in Weeks</h1>
    
     <div class="birth-info" id="weekInfo"></div>
+    <div class="reflection" id="lifeReflection"></div>
 
     <div class="wrap">
       <div class="x-axis" id="xAxis"></div>
@@ -615,10 +616,7 @@
       <div class="item"><div class="sw" style="background:#e85d5d"></div><div>Career</div></div>
       <div class="item"><div class="sw" style="background:#836fa9"></div><div>Retirement</div></div>
     </div>
-    <div class="birth-info"></div> 
-    
-    <div class="reflection" id="lifeReflection"></div>
-    <div class="birth-info" id="birthInfo"></div> 
+
     
   </div>
 
@@ -1167,12 +1165,12 @@
         document.getElementById('lifeCalendarScreen').classList.add('active');
         
         // Update birth info
-        const birthInfo = document.getElementById('birthInfo');
-        birthInfo.textContent = `Born on ${selectedDate.toLocaleDateString('en-US', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}`;
+        // const birthInfo = document.getElementById('birthInfo');
+        // birthInfo.textContent = `Born on ${selectedDate.toLocaleDateString('en-US', { 
+        //   year: 'numeric', 
+        //   month: 'long', 
+        //   day: 'numeric' 
+        // })}`;
         
         // Build and render life calendar
         buildXAxis();
