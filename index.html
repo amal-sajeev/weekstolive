@@ -1182,7 +1182,7 @@
         // Update week info
         const remainingWeeks = (COLS * ROWS)-weeksLived; // 52 weeks * 90 years = 4680 weeks
         const weekInfo = document.getElementById('weekInfo');
-        weekInfo.textContent = `You are currently in week ${weeksLived}.\n ${remainingWeeks.toLocaleString()} estimated remaining weeks.`;
+        weekInfo.textContent = `This is week ${weeksLived} of your life, with an estimated ${remainingWeeks.toLocaleString()} weeks remaining.`;
 
         showReflection();
       }, 100);
