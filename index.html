@@ -87,7 +87,7 @@
     .date-picker-screen .subtitle {
       font-size: 1.1rem;
       color: #666;
-      margin-bottom: 1rem;
+      margin-bottom: 2rem;
       text-align: center;
       animation: fadeIn 1s ease both 0.3s;
     }
@@ -471,6 +471,40 @@
       100% { background: #eef2f7; }
     }
 
+    /* Responsive scaling for mobile */
+    @media (max-width: 768px) {
+      :root {
+        /* Fit grid width to screen width, and grid height + legend to screen height */
+        --cell-size: min(
+          calc((100vw - 60px) / 52),
+          calc((100vh - 180px) / 90)
+        );
+        --gap: 1px;
+        --y-axis-width: 20px;
+      }
+
+      .life-calendar-screen {
+        padding: 8px;
+        justify-content: center;
+      }
+
+      .wrap {
+        transform: scale(1);      /* ensure natural scaling */
+        transform-origin: top center;
+        overflow: visible;
+      }
+
+      .legend {
+        font-size: 11px;
+        gap: 8px;
+        margin-top: 6px;
+      }
+
+      .legend .sw {
+        width: 12px;
+        height: 12px;
+      }
+    }
     
   </style>
 </head>
