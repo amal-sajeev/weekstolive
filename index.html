@@ -833,6 +833,7 @@
 
     function showReflection() {
       const lines = [
+        // Time awareness & mortality
         "You have fewer summers left than you think. How will you spend the next one?",
         "Every week is a brick in the wall of your life — are you building a fortress or a prison?",
         "What if you only had 1,000 weeks left — would you live today differently?",
@@ -842,7 +843,151 @@
         "Time is the one currency you can't earn back. How are you spending it?",
         "This grid is your story in weeks. Which chapter are you in?",
         "Imagine your life as a novel — are you proud of this chapter?",
-        "The future is a blank grid. What do you want to color in?"
+        "The future is a blank grid. What do you want to color in?",
+        
+        // Death as motivation
+        "Memento mori: Remember you must die. Not to frighten, but to awaken.",
+        "Every sunset brings you one day closer to your last. Are you watching?",
+        "Death is not the opposite of life, but the backdrop that gives it meaning.",
+        "You will die. What does that change about today?",
+        "The cemetery is full of people who thought they had more time.",
+        "What would you do if you knew you had exactly one year left?",
+        "Your tombstone won't list your Netflix hours. What will it say?",
+        "If this were your last week, would you spend it the same way?",
+        "Death makes philosophers of us all — what's your philosophy?",
+        "The clock is ticking for everyone. Are you listening?",
+        
+        // Present moment awareness
+        "This moment will never come again. How present are you?",
+        "Yesterday is history, tomorrow is mystery, today is a gift.",
+        "The present is the only time you can actually live in.",
+        "Are you living your days or just surviving them?",
+        "How many sunrises have you missed while planning tomorrow?",
+        "The ordinary moments are the ones you'll miss most.",
+        "Today someone is living their last normal day. Is it you?",
+        "The present moment is the only moment available to us.",
+        "Life happens while you're making other plans.",
+        "This breath, this heartbeat, this second — it's all you truly have.",
+        
+        // Regret and missed opportunities
+        "The biggest risk is not taking any risk at all.",
+        "What dreams are dying in your 'someday' file?",
+        "Regret weighs more than failure ever will.",
+        "The graveyard of dreams is paved with 'what ifs' and 'if onlys.'",
+        "What would you attempt if you knew you couldn't fail?",
+        "Fear of failure is just fear of being fully alive.",
+        "The person you could become is waiting for you to begin.",
+        "Your comfort zone is a beautiful place, but nothing grows there.",
+        "What opportunities are you trading for security?",
+        "The word 'someday' is where dreams go to die.",
+        
+        // Purpose and meaning
+        "What legacy will outlive your last breath?",
+        "If your life had a mission statement, what would it be?",
+        "Are you living a life that matters to you?",
+        "What problem were you born to solve?",
+        "Your life is your message to the world. What are you saying?",
+        "What would you do if money were no object and failure impossible?",
+        "The meaning of life is to give life meaning.",
+        "What story are you telling with the days you've been given?",
+        "Purpose isn't found, it's forged in the fire of living.",
+        "What impact will you make that echoes beyond your years?",
+        
+        // Relationships and connection
+        "Who would miss you if you were gone tomorrow?",
+        "The richest person is not the one who has the most, but needs the least.",
+        "Love is the only thing that multiplies when you give it away.",
+        "When did you last tell someone they mattered to you?",
+        "Relationships are the only treasure you can take to the grave.",
+        "Are you building bridges or walls with your words?",
+        "The quality of your relationships determines the quality of your life.",
+        "Who are you becoming in the eyes of those you love?",
+        "Time spent with loved ones is the only time truly lived.",
+        "Your presence is the greatest present you can give.",
+        
+        // Growth and change
+        "If you're not growing, you're dying.",
+        "The person you were yesterday no longer exists.",
+        "What version of yourself are you becoming?",
+        "Change is the price of relevance.",
+        "Your potential is infinite, but your time is not.",
+        "Every expert was once a beginner who refused to quit.",
+        "The best time to plant a tree was 20 years ago. The second best time is now.",
+        "You are not stuck with the person you were yesterday.",
+        "Growth requires the courage to be uncomfortable.",
+        "What new chapter will you write starting today?",
+        
+        // Priorities and values
+        "What truly matters when everything else is stripped away?",
+        "Your priorities are revealed by your calendar and bank statement.",
+        "Are you climbing the ladder against the right wall?",
+        "What are you optimizing your life for?",
+        "The things you value most should occupy most of your time.",
+        "What would you do if you could only do one thing for the rest of your life?",
+        "Your values are your GPS — are you following them?",
+        "Success without fulfillment is the ultimate failure.",
+        "What price are you willing to pay for what you want?",
+        "Are your actions aligned with your values?",
+        
+        // Action and momentum
+        "The perfect moment doesn't exist — this one will have to do.",
+        "Dreams without action are just wishes.",
+        "The journey of a thousand miles begins with a single step.",
+        "What small action could you take right now?",
+        "Motion creates emotion, action creates attraction.",
+        "You don't have to be great to get started, but you have to get started to be great.",
+        "The best way to predict the future is to create it.",
+        "Procrastination is the thief of time.",
+        "Every moment of hesitation is a moment of life passing by.",
+        "Start where you are, use what you have, do what you can.",
+        
+        // Wisdom and reflection
+        "The unexamined life is not worth living.",
+        "Wisdom comes from experience, and experience comes from poor judgment.",
+        "What would your 80-year-old self advise your current self?",
+        "The fool thinks he knows everything; the wise man knows he knows nothing.",
+        "Experience is what you get when you don't get what you wanted.",
+        "What lessons is life trying to teach you right now?",
+        "The quality of your questions determines the quality of your life.",
+        "Reflection turns experience into wisdom.",
+        "What patterns do you see when you look back at your choices?",
+        "The teacher appears when the student is ready.",
+        
+        // Gratitude and appreciation
+        "What if you woke up today with only what you thanked God for yesterday?",
+        "Gratitude turns what we have into enough.",
+        "The happiest people don't have the best of everything; they make the best of everything.",
+        "What ordinary miracle are you taking for granted?",
+        "Appreciation is the highest form of prayer.",
+        "Count your blessings, not your problems.",
+        "What abundance already exists in your life?",
+        "The secret to having enough is wanting what you have.",
+        "Every day above ground is a good day.",
+        "What simple pleasure brought you joy today?",
+        
+        // Courage and boldness
+        "Courage isn't the absence of fear; it's action in spite of fear.",
+        "What would you do if you knew you were brave enough?",
+        "The cave you fear to enter holds the treasure you seek.",
+        "Life shrinks or expands in proportion to one's courage.",
+        "What's the worst that could happen if you tried?",
+        "Fortune favors the bold.",
+        "The only way out is through.",
+        "What would you attempt if you had unlimited confidence?",
+        "Bravery is not the absence of fear, but mastery of it.",
+        "What mountain are you avoiding that you need to climb?",
+        
+        // Legacy and impact
+        "What mark will you leave on the world?",
+        "How will people remember you when you're gone?",
+        "What difference will your existence have made?",
+        "The question isn't how long you live, but how you live long.",
+        "What seeds are you planting for future generations?",
+        "Your life is a gift — how are you unwrapping it?",
+        "What problem will you solve that makes the world better?",
+        "The best time to impact someone's life is now.",
+        "What story do you want your life to tell?",
+        "How will you live on in the hearts and minds of others?"
       ];
 
       const reflection = document.getElementById('lifeReflection');
