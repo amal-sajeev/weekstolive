@@ -24,6 +24,8 @@
       color: #1a1a1a;
       overflow-x: hidden;
       transition: background 6s ease;
+      height: 100vh;
+      overflow: hidden;
     }
     
     /* Screen Transition Animations */
@@ -57,6 +59,9 @@
       font: 16px 'Roboto', sans-serif;
       background: #f8f9fa;
       animation: bgShift 12s ease-in-out infinite alternate;
+      overflow: hidden;
+      height: 100%;
+      padding: 20px;
     }
     
     .date-picker-screen h1 {
@@ -71,7 +76,7 @@
     .date-picker-screen .subtitle {
       font-size: 1.1rem;
       color: #666;
-      margin-bottom: 3rem;
+      margin-bottom: 1rem;
       text-align: center;
       animation: fadeIn 1s ease both 0.3s;
     }
@@ -84,17 +89,20 @@
       font: 16px 'Roboto', sans-serif;
       transform: scale(1.3);
       animation: zoomIn 0.6s ease both 0.6s;
+      margin: 0.5rem 0;
     }
     
     .center .date {
       font-size: 30px;
       font-weight: 300;
+      margin: 0.5rem 0;
+      padding: 10px;
     }
     
     .center .date-picker {
       display: flex;
-      padding: 50px 20px;
-      margin: 30px 0;
+      padding: 30px;
+      margin: 10px 0;
       overflow: hidden;
     }
     
@@ -166,7 +174,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-top: 2rem;
+      margin-top: 1rem;
       animation: fadeInUp 0.8s ease both 1s;
       position: relative;
       overflow: hidden;
@@ -201,6 +209,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      overflow-y: auto;
     }
     
     .life-calendar-screen h1 {
@@ -215,7 +224,7 @@
       text-align: center;
       margin-bottom: 20px;
       font-size: 16px;
-      color: #666;
+      color: 666;
       animation: fadeIn 0.8s ease both 0.4s;
     }
     
@@ -443,11 +452,102 @@
       100% { background: #eef2f7; }
     }
 
-    @media (max-width:920px){
-      :root{ --cell-size:10px; --y-axis-width:48px; }
-      .x-axis .tick{ font-size:10px; }
-      .center { transform: scale(1.1); }
-      .date-picker-screen h1 { font-size: 2rem; }
+    /* Responsive adjustments */
+    @media (max-width: 920px) {
+      :root { 
+        --cell-size: 10px; 
+        --y-axis-width: 48px; 
+      }
+      .x-axis .tick { 
+        font-size: 10px; 
+      }
+      .center { 
+        transform: scale(1.1); 
+      }
+      .date-picker-screen h1 { 
+        font-size: 2rem; 
+      }
+    }
+
+    @media (max-height: 700px) {
+      .date-picker-screen {
+        justify-content: flex-start;
+        padding-top: 2vh;
+      }
+      
+      .date-picker-screen h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.8rem;
+      }
+      
+      .date-picker-screen .subtitle {
+        font-size: 1rem;
+        margin-bottom: 0.8rem;
+      }
+      
+      .center {
+        transform: scale(1);
+        margin: 0.2rem 0;
+      }
+      
+      .center .date {
+        font-size: 24px;
+        margin: 0.3rem 0;
+      }
+      
+      .center .date-picker {
+        padding: 10px 15px;
+        margin: 5px 0;
+      }
+      
+      .continue-btn {
+        margin-top: 0.8rem;
+        height: 40px;
+      }
+    }
+
+    @media (max-height: 500px) {
+      .date-picker-screen h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .date-picker-screen .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .center {
+        transform: scale(0.9);
+      }
+      
+      .center .date {
+        font-size: 20px;
+      }
+      
+      .center .date-picker {
+        padding: 5px 10px;
+      }
+      
+      .center .day,
+      .center .month,
+      .center .year {
+        height: 40px;
+        margin: 0 8px;
+      }
+      
+      .center .day li,
+      .center .month li,
+      .center .year li {
+        height: 40px;
+        width: 70px;
+      }
+      
+      .continue-btn {
+        height: 36px;
+        font-size: 14px;
+        width: 140px;
+      }
     }
   </style>
 </head>
@@ -461,7 +561,7 @@
       <!-- React app will render here -->
     </div>
     
-    <button class="continue-btn" id="continueBtn">View My Life Calendar</button>
+    <button class="continue-btn" id="continueBtn">View My Life</button>
   </div>
 
   <!-- Life Calendar Screen -->
@@ -827,6 +927,17 @@
     // Event listeners
     document.getElementById('continueBtn').addEventListener('click', showLifeCalendar);
     document.getElementById('backBtn').addEventListener('click', showDatePicker);
+
+    // Adjust date picker screen on resize
+    window.addEventListener('resize', function() {
+      const datePickerScreen = document.getElementById('datePickerScreen');
+      if (datePickerScreen.classList.contains('active')) {
+        // Force reflow to ensure proper rendering
+        datePickerScreen.style.display = 'none';
+        datePickerScreen.offsetHeight; // Trigger reflow
+        datePickerScreen.style.display = 'flex';
+      }
+    });
   </script>
 </body>
 </html>
