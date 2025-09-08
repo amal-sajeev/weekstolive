@@ -174,7 +174,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: all 0.2s ease;
-      margin-top: 1rem;
+      margin-top: 2rem;
       animation: fadeInUp 0.8s ease both 1s;
       position: relative;
       overflow: hidden;
@@ -357,9 +357,19 @@
       box-shadow: 0 6px 10px rgba(0,0,0,0.08); 
     }
 
-    .cell.lived { 
-      background: var(--accent); 
-      border-color: rgba(0,0,0,0.06); 
+    /* Life stages from life_calendar_stages.html */
+    .cell.early { background:#0072ce; }
+    .cell.elementary { background:#1aa349; }
+    .cell.middle { background:#78c000; }
+    .cell.high { background:#ffdb00; }
+    .cell.college { background:#ff8c1a; }
+    .cell.grad { background:#d64550; }
+    .cell.career { background:#e85d5d; }
+    .cell.retirement { background:#836fa9; }
+    .cell.milestone { 
+      outline: 2px solid black; 
+      outline-offset: -1px; 
+      box-shadow: 0 0 6px rgba(0,0,0,0.3); 
     }
     
     .cell.current {
@@ -392,8 +402,9 @@
 
     .legend {
       display:flex;
+      flex-wrap:wrap;
       justify-content:center;
-      gap:18px;
+      gap:12px;
       margin-top: 12px;
       font-size: 13px;
       color:#222;
@@ -402,7 +413,7 @@
     
     .legend .item { 
       display:flex; 
-      gap:8px; 
+      gap:6px; 
       align-items:center; 
     }
     
@@ -413,9 +424,6 @@
       border:1px solid #cfcfcf; 
     }
     
-    .sw.l { background:var(--accent); }
-    .sw.f { background:var(--future); }
-
     /* Animation Keyframes */
     @keyframes fadeIn { 
       from { opacity:0; } 
@@ -578,9 +586,16 @@
       <div class="grid-container" id="lifeGrid"></div>
     </div>
 
+    <!-- Updated Legend from life_calendar_stages.html -->
     <div class="legend">
-      <div class="item"><div class="sw l"></div><div>Lived weeks</div></div>
-      <div class="item"><div class="sw f"></div><div>Future weeks</div></div>
+      <div class="item"><div class="sw" style="background:#0072ce"></div><div>Early Years</div></div>
+      <div class="item"><div class="sw" style="background:#1aa349"></div><div>Elementary</div></div>
+      <div class="item"><div class="sw" style="background:#78c000"></div><div>Middle School</div></div>
+      <div class="item"><div class="sw" style="background:#ffdb00"></div><div>High School</div></div>
+      <div class="item"><div class="sw" style="background:#ff8c1a"></div><div>College</div></div>
+      <div class="item"><div class="sw" style="background:#d64550"></div><div>Graduate School</div></div>
+      <div class="item"><div class="sw" style="background:#e85d5d"></div><div>Career</div></div>
+      <div class="item"><div class="sw" style="background:#836fa9"></div><div>Retirement</div></div>
     </div>
   </div>
 
@@ -751,27 +766,58 @@
       }
     }
 
+    // Life stages function from life_calendar_stages.html
+    function getLifeStage(age) {
+      if (age < 5) return "early";
+      if (age < 11) return "elementary";
+      if (age < 14) return "middle";
+      if (age < 18) return "high";
+      if (age < 22) return "college";
+      if (age < 25) return "grad";
+      if (age < 65) return "career";
+      return "retirement";
+    }
+
+    // Milestone markers function from life_calendar_stages.html
+    function markMilestones(cells) {
+      const milestones = [
+        { age: 16, week: 0, label: "Driving age" },
+        { age: 18, week: 0, label: "Voting age" },
+        { age: 21, week: 0, label: "Legal drinking age" },
+        { age: 26, week: 0, label: "First child (avg)" },
+        { age: 30, week: 0, label: "Marriage (avg)" },
+        { age: 65, week: 0, label: "Retirement" },
+        { age: 79, week: 0, label: "Life expectancy" }
+      ];
+      milestones.forEach(m => {
+        const idx = m.age * COLS + m.week;
+        if (idx < cells.length) {
+          cells[idx].classList.add("milestone");
+          cells[idx].dataset.milestone = m.label;
+        }
+      });
+    }
+
     function showReflection() {
-    const lines = [
-      "You have fewer summers left than you think. How will you spend the next one?",
-      "Every week is a brick in the wall of your life — are you building a fortress or a prison?",
-      "What if you only had 1,000 weeks left — would you live today differently?",
-      "Your calendar is finite. Your attention even more so.",
-      "Seneca said: 'It is not that we have a short time to live, but that we waste a lot of it.'",
-      "Each square is a chance — will you trade it for scrolling or for living?",
-      "Time is the one currency you can't earn back. How are you spending it?",
-      "This grid is your story in weeks. Which chapter are you in?",
-      "Imagine your life as a novel — are you proud of this chapter?",
-      "The future is a blank grid. What do you want to color in?"
-    ];
+      const lines = [
+        "You have fewer summers left than you think. How will you spend the next one?",
+        "Every week is a brick in the wall of your life — are you building a fortress or a prison?",
+        "What if you only had 1,000 weeks left — would you live today differently?",
+        "Your calendar is finite. Your attention even more so.",
+        "Seneca said: 'It is not that we have a short time to live, but that we waste a lot of it.'",
+        "Each square is a chance — will you trade it for scrolling or for living?",
+        "Time is the one currency you can't earn back. How are you spending it?",
+        "This grid is your story in weeks. Which chapter are you in?",
+        "Imagine your life as a novel — are you proud of this chapter?",
+        "The future is a blank grid. What do you want to color in?"
+      ];
 
-    const reflection = document.getElementById('lifeReflection');
-    reflection.textContent = lines[Math.floor(Math.random() * lines.length)];
+      const reflection = document.getElementById('lifeReflection');
+      reflection.textContent = lines[Math.floor(Math.random() * lines.length)];
 
-    // Trigger fade-in
-    setTimeout(() => reflection.classList.add('show'), 100);
-  }
-
+      // Trigger fade-in
+      setTimeout(() => reflection.classList.add('show'), 100);
+    }
 
     // Life Calendar Code
     const COLS = 52;
@@ -815,7 +861,11 @@
           cell.dataset.index = idx + 1;
           
           cell.addEventListener('mouseenter', (e) => {
-            tooltip.innerHTML = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week+1}<br><small>Absolute week # ${idx+1}</small>`;
+            let info = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week+1}<br><small>Absolute week # ${idx+1}</small>`;
+            if (cell.dataset.milestone) {
+              info += `<br><span style="color:#d64550; font-weight:bold;">★ ${cell.dataset.milestone}</span>`;
+            }
+            tooltip.innerHTML = info;
             positionTooltip(e);
             tooltip.classList.add('show');
           });
@@ -830,8 +880,8 @@
     function positionTooltip(e) {
       const tooltip = document.getElementById('tooltip');
       const pad = 12;
-      const tooltipWidth = 160; // Approximate tooltip width
-      const tooltipHeight = 40; // Approximate tooltip height
+      const tooltipWidth = 200;
+      const tooltipHeight = 60;
       
       // Get viewport dimensions
       const viewportWidth = window.innerWidth;
@@ -865,8 +915,10 @@
     function markLivedWeeks(birthDate) {
       const cells = document.getElementById('lifeGrid').children;
       
+      // Reset all cells
       for(let i = 0; i < cells.length; i++) {
-        cells[i].classList.remove('lived', 'current');
+        cells[i].className = 'cell';
+        delete cells[i].dataset.milestone;
       }
       
       if (!birthDate || isNaN(birthDate)) return;
@@ -875,15 +927,21 @@
       const diffMs = now - birthDate;
       const weeksLived = Math.floor(diffMs / (1000*60*60*24*7));
       
-      for(let i = 0; i < cells.length; i++) {
-        if (i < weeksLived) cells[i].classList.add('lived');
-        else cells[i].classList.remove('lived');
+      // Color the lived weeks based on life stage
+      for(let i = 0; i < weeksLived; i++) {
+        const age = Math.floor(i / COLS);
+        const stage = getLifeStage(age);
+        cells[i].classList.add(stage);
       }
       
+      // Mark the current week
       const curIndex = Math.max(0, Math.min(cells.length - 1, weeksLived - 1));
       if (curIndex >= 0 && curIndex < cells.length) {
         cells[curIndex].classList.add('current');
       }
+      
+      // Add milestone markers
+      markMilestones(cells);
     }
 
     function showLifeCalendar() {
