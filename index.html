@@ -471,38 +471,61 @@
       100% { background: #eef2f7; }
     }
 
-    /* Responsive scaling for mobile */
+    /* Scale down grid on smaller screens */
     @media (max-width: 768px) {
       :root {
-        /* Fit grid width to screen width, and grid height + legend to screen height */
-        --cell-size: min(
-          calc((100vw - 60px) / 52),
-          calc((100vh - 180px) / 90)
-        );
+        --cell-size: 5px;
         --gap: 1px;
-        --y-axis-width: 20px;
+        --y-axis-width: 40px;
       }
-
-      .life-calendar-screen {
-        padding: 18px;
-        justify-content: center;
+      .x-axis .tick {
+        font-size: 8px;
       }
-
-      .wrap {
-        transform: scale(1);      /* ensure natural scaling */
-        transform-origin: top center;
-        overflow: auto;
+      .y-axis .label {
+        font-size: 9px;
       }
-
-      .legend {
-        font-size: 11px;
-        gap: 8px;
-        margin-top: 6px;
+    }
+    @media (max-height: 500px) {
+      .date-picker-screen h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
       }
-
-      .legend .sw {
-        width: 12px;
-        height: 12px;
+      
+      .date-picker-screen .subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .center {
+        transform: scale(0.9);
+      }
+      
+      .center .date {
+        font-size: 20px;
+      }
+      
+      .center .date-picker {
+        padding: 5px 10px;
+      }
+      
+      .center .day,
+      .center .month,
+      .center .year {
+        height: 40px;
+        margin: 0 8px;
+      }
+      
+      .center .day li,
+      .center .month li,
+      .center .year li {
+        height: 40px;
+        width: 70px;
+      }
+      
+      .continue-btn {
+        height: 36px;
+        font-size: 14px;
+        width: 140px;
       }
     }
     
