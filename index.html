@@ -38,18 +38,31 @@
       opacity: 0;
       pointer-events: none;
       transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease, filter 0.4s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      will-change: opacity, transform;
       overflow-y: auto;
-      filter: blur(6px);
     }
-    
+
     .screen.active {
       opacity: 1;
       pointer-events: auto;
       transform: translateY(0);
-      filter: blur(0);
     }
     
+    .screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.4);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .screen:not(.active)::before {
+    opacity: 1;
+  }
+
     /* Date Picker Screen Styles */
     .date-picker-screen {
       display: flex;
@@ -282,15 +295,15 @@
       display: grid;
       grid-template-columns: var(--y-axis-width) 1fr;
       grid-template-rows: auto 1fr;
-      column-gap: 16px;
+      column-gap: 8px;
       align-items: start;
       justify-content: center;
-      width: calc((var(--cols) * var(--cell-size)) + ((var(--cols) - 1) * var(--gap)) + var(--y-axis-width) + 16px);
       margin: 0 auto;
       opacity: 0;
       animation: fadeIn 1s ease forwards 0.8s;
+      max-width: 100%;
+      overflow-x: auto;
     }
-
     .x-axis {
       grid-column: 2;
       grid-row: 1;
@@ -514,6 +527,20 @@
       }
     }
 
+    /* Scale down grid on smaller screens */
+    @media (max-width: 768px) {
+      :root {
+        --cell-size: 6px;
+        --gap: 1px;
+        --y-axis-width: 40px;
+      }
+      .x-axis .tick {
+        font-size: 8px;
+      }
+      .y-axis .label {
+        font-size: 9px;
+      }
+    }
     @media (max-height: 500px) {
       .date-picker-screen h1 {
         font-size: 1.5rem;
@@ -848,34 +875,50 @@
 
     function buildGrid() {
       const lifeGrid = document.getElementById('lifeGrid');
-      const tooltip = document.getElementById('tooltip');
-      
       lifeGrid.innerHTML = '';
-      for(let age = 0; age < ROWS; age++) {
-        for(let week = 0; week < COLS; week++) {
+
+      for (let age = 0; age < ROWS; age++) {
+        for (let week = 0; week < COLS; week++) {
           const idx = age * COLS + week;
           const cell = document.createElement('div');
           cell.className = 'cell';
           cell.dataset.age = age;
-          cell.dataset.week = (week + 1);
+          cell.dataset.week = week + 1;
           cell.dataset.index = idx + 1;
-          
-          cell.addEventListener('mouseenter', (e) => {
-            let info = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week+1}<br><small>Absolute week # ${idx+1}</small>`;
-            if (cell.dataset.milestone) {
-              info += `<br><span style="color:#d64550; font-weight:bold;">★ ${cell.dataset.milestone}</span>`;
-            }
-            tooltip.innerHTML = info;
-            positionTooltip(e);
-            tooltip.classList.add('show');
-          });
-          
-          cell.addEventListener('mousemove', (e) => { positionTooltip(e); });
-          cell.addEventListener('mouseleave', () => { tooltip.classList.remove('show'); });
           lifeGrid.appendChild(cell);
-        }
-      }
     }
+  }
+
+  const tooltip = document.getElementById('tooltip');
+
+  // Delegated events
+  lifeGrid.addEventListener('mouseover', (e) => {
+    const cell = e.target.closest('.cell');
+    if (!cell) return;
+
+    let age = cell.dataset.age;
+    let week = cell.dataset.week;
+    let idx = cell.dataset.index;
+
+    let info = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week}<br><small>Absolute week # ${idx}</small>`;
+    if (cell.dataset.milestone) {
+      info += `<br><span style="color:#d64550; font-weight:bold;">★ ${cell.dataset.milestone}</span>`;
+    }
+    tooltip.innerHTML = info;
+    tooltip.classList.add('show');
+  });
+
+  lifeGrid.addEventListener('mousemove', (e) => {
+    if (!e.target.closest('.cell')) return;
+    positionTooltip(e);
+  });
+
+  lifeGrid.addEventListener('mouseout', (e) => {
+    if (!e.target.closest('.cell')) return;
+    tooltip.classList.remove('show');
+  });
+}
+
 
     function positionTooltip(e) {
       const tooltip = document.getElementById('tooltip');
@@ -914,33 +957,33 @@
 
     function markLivedWeeks(birthDate) {
       const cells = document.getElementById('lifeGrid').children;
-      
-      // Reset all cells
-      for(let i = 0; i < cells.length; i++) {
-        cells[i].className = 'cell';
-        delete cells[i].dataset.milestone;
-      }
-      
+
       if (!birthDate || isNaN(birthDate)) return;
 
       const now = new Date();
       const diffMs = now - birthDate;
-      const weeksLived = Math.floor(diffMs / (1000*60*60*24*7));
-      
-      // Color the lived weeks based on life stage
-      for(let i = 0; i < weeksLived; i++) {
+      const weeksLived = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
+
+      // First clear only previously applied classes (not rebuilding DOM)
+      for (let i = 0; i < cells.length; i++) {
+        cells[i].className = 'cell';
+        delete cells[i].dataset.milestone;
+      }
+
+      // Color lived weeks based on life stage
+      for (let i = 0; i < weeksLived && i < cells.length; i++) {
         const age = Math.floor(i / COLS);
         const stage = getLifeStage(age);
         cells[i].classList.add(stage);
       }
-      
+
       // Mark the current week
       const curIndex = Math.max(0, Math.min(cells.length - 1, weeksLived - 1));
-      if (curIndex >= 0 && curIndex < cells.length) {
+      if (curIndex >= 0) {
         cells[curIndex].classList.add('current');
       }
-      
-      // Add milestone markers
+
+      // Add milestone markers (only affects specific cells)
       markMilestones(cells);
     }
 
