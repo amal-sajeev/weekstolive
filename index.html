@@ -128,33 +128,65 @@
       border-radius: 0;
     }
     
-    .center .day:before,
-    .center .month:before,
-    .center .year:before,
-    .center .day:after,
-    .center .month:after,
-    .center .year:after {
-      content: '';
+    /* Replace gray overlays with up/down buttons */
+    .center .day .up-btn,
+    .center .month .up-btn,
+    .center .year .up-btn,
+    .center .day .down-btn,
+    .center .month .down-btn,
+    .center .year .down-btn {
       position: absolute;
       left: 0;
-      width: 100%;
+      width: 110%;
       height: 50px;
-      background-color: #fff;
-      opacity: 0.8;
-      pointer-events: none;
-      z-index: 1;
+      background: rgba(255, 255, 255, 0.75);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content:  flex-end;
+      font-size: 18px;
+      font-weight: bold;
+      color: #0522f3;
+      transition: all 0.2s ease;
+      z-index: 20;
+      backdrop-filter: blur(4px);
+      pointer-events: auto;
     }
     
-    .center .day:before,
-    .center .month:before,
-    .center .year:before {
+    .center .day .up-btn,
+    .center .month .up-btn,
+    .center .year .up-btn {
       top: -50px;
     }
     
-    .center .day:after,
-    .center .month:after,
-    .center .year:after {
+    .center .day .down-btn,
+    .center .month .down-btn,
+    .center .year .down-btn {
       bottom: -50px;
+    }
+    
+    .center .day .up-btn:hover,
+    .center .month .up-btn:hover,
+    .center .year .up-btn:hover,
+    .center .day .down-btn:hover,
+    .center .month .down-btn:hover,
+    .center .year .down-btn:hover {
+      background: rgba(255, 255, 255, 0.78);
+      color: #0522f3;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(5, 34, 243, 0.15);
+    }
+    
+    .center .day .up-btn:active,
+    .center .month .up-btn:active,
+    .center .year .up-btn:active,
+    .center .day .down-btn:active,
+    .center .month .down-btn:active,
+    .center .year .down-btn:active {
+      background:rgba(255, 255, 255, 0.78);
+      transform: scale(0.95);
+      box-shadow: 0 1px 4px rgba(5, 34, 243, 0.2);
     }
     
     .center .day li,
@@ -646,6 +678,23 @@
           this.props.onDateChange(this.props.type, -finalPosition / 50);
         });
 
+        // Button click handlers
+        _defineProperty(this, "onUpClick", () => {
+          let maxPosition = -(this.props.data.length - 1) * 50;
+          let newPosition = this.state.position + 50;
+          let finalPosition = Math.max(maxPosition, Math.min(0, newPosition));
+          this.setState({ position: finalPosition });
+          this.props.onDateChange(this.props.type, -finalPosition / 50);
+        });
+
+        _defineProperty(this, "onDownClick", () => {
+          let maxPosition = -(this.props.data.length - 1) * 50;
+          let newPosition = this.state.position - 50;
+          let finalPosition = Math.max(maxPosition, Math.min(0, newPosition));
+          this.setState({ position: finalPosition });
+          this.props.onDateChange(this.props.type, -finalPosition / 50);
+        });
+
         this.state = { position: selected ? -(selected - 1) * 50 : 0 };
         this.offset = 0;
         this.dragging = false;
@@ -670,8 +719,19 @@
           onMouseDown: this.onMouseDown, 
           onTouchStart: this.onMouseDown,
           onWheel: this.onWheel 
-        }, React.createElement("ul", { className: "handle", style: inlineStyle },
-        this.props.data.map(item => React.createElement("li", { key: item }, item))));
+        }, 
+        React.createElement("button", { 
+          className: "up-btn", 
+          onClick: this.onUpClick,
+          onMouseDown: (e) => e.stopPropagation()
+        }, "▲"),
+        React.createElement("ul", { className: "handle", style: inlineStyle },
+        this.props.data.map(item => React.createElement("li", { key: item }, item))),
+        React.createElement("button", { 
+          className: "down-btn", 
+          onClick: this.onDownClick,
+          onMouseDown: (e) => e.stopPropagation()
+        }, "▼"));
       }
     }
 
@@ -831,39 +891,38 @@
           cell.dataset.week = week + 1;
           cell.dataset.index = idx + 1;
           lifeGrid.appendChild(cell);
+        }
+      }
+
+      const tooltip = document.getElementById('tooltip');
+
+      // Delegated events
+      lifeGrid.addEventListener('mouseover', (e) => {
+        const cell = e.target.closest('.cell');
+        if (!cell) return;
+
+        let age = cell.dataset.age;
+        let week = cell.dataset.week;
+        let idx = cell.dataset.index;
+
+        let info = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week}<br><small>Absolute week # ${idx}</small>`;
+        if (cell.dataset.milestone) {
+          info += `<br><span style="color:#d64550; font-weight:bold;">★ ${cell.dataset.milestone}</span>`;
+        }
+        tooltip.innerHTML = info;
+        tooltip.classList.add('show');
+      });
+
+      lifeGrid.addEventListener('mousemove', (e) => {
+        if (!e.target.closest('.cell')) return;
+        positionTooltip(e);
+      });
+
+      lifeGrid.addEventListener('mouseout', (e) => {
+        if (!e.target.closest('.cell')) return;
+        tooltip.classList.remove('show');
+      });
     }
-  }
-
-  const tooltip = document.getElementById('tooltip');
-
-  // Delegated events
-  lifeGrid.addEventListener('mouseover', (e) => {
-    const cell = e.target.closest('.cell');
-    if (!cell) return;
-
-    let age = cell.dataset.age;
-    let week = cell.dataset.week;
-    let idx = cell.dataset.index;
-
-    let info = `<strong>Age:</strong> ${age} <span style="margin:0 6px">•</span> <strong>Week:</strong> ${week}<br><small>Absolute week # ${idx}</small>`;
-    if (cell.dataset.milestone) {
-      info += `<br><span style="color:#d64550; font-weight:bold;">★ ${cell.dataset.milestone}</span>`;
-    }
-    tooltip.innerHTML = info;
-    tooltip.classList.add('show');
-  });
-
-  lifeGrid.addEventListener('mousemove', (e) => {
-    if (!e.target.closest('.cell')) return;
-    positionTooltip(e);
-  });
-
-  lifeGrid.addEventListener('mouseout', (e) => {
-    if (!e.target.closest('.cell')) return;
-    tooltip.classList.remove('show');
-  });
-}
-
 
     function positionTooltip(e) {
       const tooltip = document.getElementById('tooltip');
